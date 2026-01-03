@@ -40,17 +40,19 @@ const getAllpost = async (req : Request,res : Response)=>{
         const searchString = typeof search === 'string' ? search : undefined
 
         const tags = req.query.tags ? ( req.query.tags as string).split(',') :[]
-         const isFeatured = req.query.isFeatured ? 
+        
+        const isFeatured = req.query.isFeatured ? 
          req.query.isFeatured === 'true' ? 
           true :req.query.isFeatured === 'false' ? 
           false : undefined : undefined
 
-         console.log({isFeatured})
+         
         
         const status = req.query.status as postStatus | undefined
+        const authorId = req.query.authorId  as string |undefined
 
 
-        const result = await PostService.getAllpost({search : searchString, tags, isFeatured, status})
+        const result = await PostService.getAllpost({search : searchString, tags, isFeatured, status, authorId})
 
         res.status(200).json({
             data : result

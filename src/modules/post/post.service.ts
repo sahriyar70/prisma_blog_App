@@ -14,7 +14,22 @@ const createPost = async (data : Omit<post, 'id' | 'createAt '| 'updatedAt'>,use
 }
 
 
-const getAllpost = async ({search,tags, isFeatured, status}: {search?: string| undefined,tags : string [] | [], isFeatured : boolean | undefined, status : postStatus | undefined})=>{
+const getAllpost = async ({
+    search,
+    tags,
+     isFeatured,
+      status,
+       authorId
+    }: {
+        search?: string| undefined,
+        tags : string [] | [], 
+        isFeatured : boolean | undefined,
+         status : postStatus | undefined,
+         authorId : string | undefined
+        
+        })=>{
+
+
     const andConditions :  postWhereInput[] = []
 
     if(search){
@@ -51,6 +66,12 @@ const getAllpost = async ({search,tags, isFeatured, status}: {search?: string| u
     if(status){
         andConditions.push({
             status
+        })
+    }
+
+    if(authorId){
+        andConditions.push({
+            authorId
         })
     }
     
