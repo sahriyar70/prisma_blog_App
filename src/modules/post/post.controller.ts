@@ -4,6 +4,7 @@ import { Result } from "pg";
 import { date, number } from "better-auth/*";
 import { postStatus } from "../../../generated/prisma/enums";
 import pagenationSortingHelpars from "../../helpers/pagenationSortingHelpers";
+import { prisma } from "../../prisma";
 
 
 const createPost = async (req: Request, res: Response) => {
@@ -78,9 +79,30 @@ const getAllpost = async (req : Request,res : Response)=>{
 
 }
 
+const getpostById = async(req:Request,res:Response)=>{
+    try {
+
+        const {postId} = req.params
+        if(!postId){
+            throw Error('post id is requered')
+        }
+        
+        const result =   await PostService.getpostById(postId)
+        return res.status(200).json(result)
+
+    } catch (error) {
+        res.status(400).json({
+            message : 'fieldss',
+            messages: error
+        
+        })
+    }
+}
+
 
 
 export const PostController = {
     createPost,
-    getAllpost
+    getAllpost,
+    getpostById
 };

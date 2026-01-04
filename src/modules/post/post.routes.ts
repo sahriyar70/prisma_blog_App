@@ -6,6 +6,9 @@ import auth from "../../medillware/auth";
 const router = express.Router();
 
 router.get("/", PostController.getAllpost)
+router.get("/:postId",
+    PostController.getpostById
+)
 
 router.post("/", auth(UserRole.USER, UserRole.ADMIN), PostController.createPost);
 
