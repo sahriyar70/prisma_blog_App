@@ -1,4 +1,5 @@
 
+import { date } from "better-auth/*";
 import { post, postStatus } from "../../../generated/prisma/client";
 import { postWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../prisma";
@@ -34,8 +35,8 @@ const getAllpost = async ({
          page : number,
          limit : number
          skip : number
-         sortBy : string | undefined
-         sortOrder : string | undefined
+         sortBy : string 
+         sortOrder : string 
         
         })=>{
 
@@ -92,11 +93,26 @@ const getAllpost = async ({
         where :{
            AND : andConditions
         },
-        orderBy : sortBy && sortOrder ?{
+        orderBy :{
             [sortBy] :sortOrder 
-        } : {createAt : 'desc'}
+        } 
     })
-    return allpost;
+
+    const total = await prisma.post.count({
+        where :{
+           AND : andConditions
+        }
+    })
+
+    return {
+        date : allpost,
+        pagenation : {
+            total,
+            page,
+            limit,
+            tolalPage : Math.ceil(total/limit)
+        }
+    };
 }
 
 export const PostService = {
