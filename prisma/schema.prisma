@@ -38,7 +38,7 @@ model Comment {
   postId   String
   post     post          @relation(fields: [postId], references: [id])
   parentId String?
-  parent   Comment?      @relation("CommentReplies", fields: [parentId], references: [id])
+  parent   Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade  )
   replys   Comment[]     @relation("CommentReplies")
   status   CommentStatus @default(APPROVED)
 

@@ -17,7 +17,7 @@ app.all('/api/auth/*splat', toNodeHandler(auth));
 app.use(express.json())
 
 app.use('/posts', postRoutes)
-app.use('/comment', commentRouter)
+app.use('/comments', commentRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello World!')

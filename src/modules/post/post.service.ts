@@ -1,6 +1,6 @@
 
 import { date } from "better-auth/*";
-import { post, postStatus } from "../../../generated/prisma/client";
+import { CommentStatus, post, postStatus } from "../../../generated/prisma/client";
 import { postWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../prisma";
 
@@ -95,7 +95,12 @@ const getAllpost = async ({
         },
         orderBy :{
             [sortBy] :sortOrder 
-        } 
+        },
+        include:{
+            _count:{
+                select: {comments:true}
+            }
+        }
     })
 
     const total = await prisma.post.count({
@@ -132,6 +137,37 @@ const getpostById = async (postId:string)=>{
     const postdata = await tx.post.findUnique({
         where : {
             id : postId
+        },
+        include :{
+            comments:{
+                where :{
+                    parentId:null,
+                    status:CommentStatus.APPROVED
+                },
+
+                orderBy: {createAt:"desc"},
+                include:{
+                    replys:{
+                        where:{
+                             status:CommentStatus.APPROVED
+                        },
+                        orderBy:{createAt: "asc"},
+                        include:{
+                            replys:{
+                                where:{
+                                     status:CommentStatus.APPROVED
+                                },
+                                orderBy: {
+                                    createAt:"asc"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            _count:{
+                select:{comments:true}
+            }
         }
     })
     return postdata
