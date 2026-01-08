@@ -25,4 +25,9 @@ router.patch("/:commentId",
     commentController.updateComment
 )
 
+router.patch('/:id/modaret',
+    auth(UserRole.ADMIN),
+    commentController.modaretComment
+)
+
 export const commentRouter: Router = router;

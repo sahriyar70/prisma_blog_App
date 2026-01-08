@@ -108,10 +108,35 @@ const  updateComment = async (commentId :string,data:{content?:string,status?:Co
    
 }
 
+const modaretComment = async(id:string, data:{status:CommentStatus})=>{
+   const commentData = await prisma.comment.findFirstOrThrow({
+    where :{
+        id 
+    },
+    select :{
+        id : true,
+        status : true
+    }
+   })
+
+   if(commentData.status === data.status){
+    throw new Error(`your provided status (${data.status})is alrady up to date `)
+   }
+
+
+   return await prisma.comment.update({
+    where :{
+        id
+    },
+    data
+   })
+}
+
 export const commentService = {
     createComment,
     getCommentById,
     getCommentByAuthor,
     deleteComment ,
-    updateComment
+    updateComment,
+    modaretComment
 }

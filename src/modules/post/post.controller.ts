@@ -5,6 +5,7 @@ import { date, number } from "better-auth/*";
 import { postStatus } from "../../../generated/prisma/enums";
 import pagenationSortingHelpars from "../../helpers/pagenationSortingHelpers";
 import { prisma } from "../../prisma";
+import { UserRole } from "../../medillware/auth";
 
 
 const createPost = async (req: Request, res: Response) => {
@@ -99,10 +100,98 @@ const getpostById = async(req:Request,res:Response)=>{
     }
 }
 
+const getMypost = async (req:Request,res:Response)=>{
+    try {
+
+        const user = req.user
+       if(!user){
+        throw new Error('unauthorazid')
+       }
+        
+        const result =   await PostService.getMypost(user?.id as string   )
+        return res.status(200).json(result)
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            message : 'fieldss',
+            messages: error
+        
+        })
+    }
+} 
+
+const updatePost = async (req:Request,res:Response)=>{
+    try {
+
+        const user = req.user
+       if(!user){
+        throw new Error('unauthorazid')
+       }
+        const {postId} = req.params
+        const isAdmin = user.role === UserRole.ADMIN
+        console.log(user)
+        const result =   await PostService.updatePost(postId as string,req.body,user.id, isAdmin)
+        return res.status(200).json(result)
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            message : 'post up date fileds',
+            messages: error
+        
+        })
+    }
+}
+
+const deletePost = async (req:Request,res:Response)=>{
+    try {
+
+        const user = req.user
+       if(!user){
+        throw new Error('unauthorazid')
+       }
+        const {postId} = req.params
+        const isAdmin = user.role === UserRole.ADMIN
+        console.log(user)
+        const result =   await PostService.deletePost(postId as string,user.id, isAdmin)
+        return res.status(200).json(result)
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            message : 'post delete fileds',
+            messages: error
+        
+        })
+    }
+}
+
+const getStats = async (req:Request,res:Response)=>{
+    try {
+
+      
+        const result =   await PostService.getStats()
+        return res.status(200).json(result)
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            message : 'stats fatch   fileds',
+            messages: error
+        
+        })
+    }
+}
+
 
 
 export const PostController = {
     createPost,
     getAllpost,
-    getpostById
+    getpostById,
+    getMypost,
+    updatePost,
+    deletePost,
+    getStats
 };

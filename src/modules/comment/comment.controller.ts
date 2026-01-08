@@ -75,10 +75,27 @@ const updateComment = async (req:Request,res:Response)=>{
     }
 }
 
+const modaretComment = async (req:Request,res:Response)=>{
+    try {
+             
+        const {commentId} = req.params
+        const result = await commentService.modaretComment (commentId as string,req.body)
+        res.status(200).json(result)
+        
+    } catch (e) {
+        const errorMessage = ( e instanceof Error )? e.message : 'comment update field'
+        res.status(400).json({
+            error: errorMessage,
+            details : e
+        })
+    }
+}
+
 export const commentController = {
     creatComment,
     getCommentById  ,
     getCommentByAuthor,
     deleteComment,
-    updateComment
+    updateComment,
+    modaretComment
 }
