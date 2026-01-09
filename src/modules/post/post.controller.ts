@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PostService } from "./post.service";
 import { Result } from "pg";
 import { date, number } from "better-auth/*";
@@ -8,7 +8,7 @@ import { prisma } from "../../prisma";
 import { UserRole } from "../../medillware/auth";
 
 
-const createPost = async (req: Request, res: Response) => {
+const createPost = async (req: Request, res: Response, next : NextFunction) => {
 
     try {
 
@@ -28,11 +28,7 @@ const createPost = async (req: Request, res: Response) => {
 
         
     } catch (error) {
-        res.status(400).json({
-            message : 'fieldss',
-            messages: error
-        
-        })
+        next(error)
     }
 }
    

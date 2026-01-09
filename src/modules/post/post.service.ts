@@ -315,7 +315,7 @@ const getStats = async ()=>{
             totalUser,
             adminCount,
             userCount,
-            totalViews : totalViews._sum.views
+            totalViews : totalViews._sum.views 
         } 
 
 
