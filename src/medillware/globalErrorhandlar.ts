@@ -17,6 +17,21 @@ function errorHandler (err:any
         
     }
 
+    else if (err instanceof Prisma.PrismaClientKnownRequestError ){
+        if (err.code === "P2025"){
+            statusCode = 400
+            errorMessage = " operation failds "
+        }
+        else if  (err.code ===  "P2002"){
+             statusCode = 400
+             errorMessage = "Duplikcate key error "
+        }
+        else if (err.code === "P2003"){
+             statusCode = 400
+            errorMessage = "Foreign key constraint failds"
+        }
+    }
+
   res.status(statusCode)
   res.json({
     message :errorMessage,
