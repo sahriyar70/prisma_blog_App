@@ -30,6 +30,22 @@ function errorHandler (err:any
              statusCode = 400
             errorMessage = "Foreign key constraint failds"
         }
+    
+    }
+
+    else if ( err instanceof Prisma.PrismaClientUnknownRequestError){
+        statusCode = 500
+        errorMessage = " Eingen is canected to failds "
+        }
+    else if ( err instanceof Prisma.PrismaClientInitializationError){
+        if(err.errorCode === "P1000"){
+            statusCode = 401 
+            errorMessage = "Authenticatin faildes"
+        }
+        else if( err.errorCode === "P1001"){
+            statusCode = 400
+            errorMessage = "can't reach databass server"
+        }
     }
 
   res.status(statusCode)
